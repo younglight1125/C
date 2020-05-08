@@ -1,0 +1,67 @@
+#include <iostream>
+
+using namespace std;
+//=====减绳子，求剪短后绳子乘积最大的问题=========
+//输入绳子长度len
+//输出绳子的最大乘积数
+int maxProductAfterCut_solution1(int length)
+{
+	//使用自下而上的解法，列出初值
+	if (length < 2)
+		return 0;
+	if (length == 2)
+		return 1;
+	if (length == 3)
+		return 2;
+	//定义一个指向数组的指针
+	int* products = new int[length + 1];//用于存放每个i的最优值
+	products[0] = 0;
+	products[1] = 1;
+	products[2] = 2;
+	products[3] = 3;
+
+	int max = 0;
+	for (int i = 4; i <= length; ++i)
+	{
+		max = 0;
+		for (int j = 0; j <= i/2; ++j)
+		{
+			int product = products[j] * products[i-j];
+			if (max < product)
+				max = product;
+
+			products[i] = max;
+		}
+	}
+	max = products[length];
+	delete[] products;
+	return max;
+}
+
+//贪婪算法
+int maxProductAfterCut_solution2(int length)
+{
+	if (length <  2)  return 0;
+	if (length == 2) return 1;
+	if (length == 3) return 2;
+
+	//尽可能多的去剪长度为3的绳子段
+	int timesOf3 = length / 3;
+
+	//绳子剩下为4的时候，不再去剪3，而是变成2*2
+	if (length - timesOf3 * 3 == 1)
+		timesOf3 -= 1;
+
+	int timesOf2 = (length - timesOf3 * 3) / 2;
+	return (int)(pow(3, timesOf3)*(int)(pow(2, timesOf2)));//求幂
+}
+
+
+int main()
+{
+	int len = 8;
+	int num = maxProductAfterCut_solution2(len);
+	cout << num << endl;
+	system("PAUSE");
+	return 0;
+}
