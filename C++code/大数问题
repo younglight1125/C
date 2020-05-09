@@ -1,0 +1,125 @@
+#include <iostream>
+
+using namespace std;
+//申明 函数
+void Print1ToMaxOfDigits(int n);
+bool Increment(char* number);
+void PrintNumber(char* number);
+void Print1ToMaxOfDigits_solution2(int n);
+void Print1ToMaxOfDigitsRecursively(char* number, int n, int index);
+//申明 函数
+
+//===========字符串模拟数字加法的解法
+//打印从1到最大的n位数
+void Print1ToMaxOfDigits(int n)
+{
+	if (n <= 0)  return;
+
+	char* number = new char[n + 1];
+	memset(number, '0', n);
+	number[n] = '\0';
+
+	while (!Increment(number))
+	{
+		PrintNumber(number);
+	}
+
+	delete[] number;
+}
+
+//判断是否进位溢出
+bool Increment(char* number)
+{
+	bool isOverFlow = false;
+	int nTakeOver = 0;
+	int nLength = strlen(number);
+
+	for (int i = nLength - 1; i >= 0; --i)
+	{
+		int nSum = number[i] - '0' + nTakeOver;
+
+		//个位数加1
+		if (i == nLength - 1)
+			nSum++;
+
+		if (nSum >= 10)
+		{
+			//判读最高位是否溢出
+			if (i == 0)
+				isOverFlow = true;
+			else
+			{
+				nSum -= 10;
+				nTakeOver = 1;
+				number[i] = '0' + nSum;
+			}
+		}
+		else
+		{
+			//没有溢出则可以打印，跳出循环
+			number[i] = '0' + nSum;
+			break;
+		}
+	}
+	return isOverFlow;
+}
+
+
+//打印数字
+void PrintNumber(char* number)
+{
+	bool isBeginning0 = true;//巧妙
+	int nLength = strlen(number);
+	//cout << nLength << endl;//测试nLength的长度,计算长度时不断结尾的标识符
+	for (int i = 0; i < nLength; i++)
+	{
+		//分开098和108的区别
+		if (isBeginning0 && number[i] != '0')
+			isBeginning0 = false;
+		if (!isBeginning0)
+			printf("%c", number[i]);
+	}
+	printf("\t");
+}
+
+
+//转化为数字排序的算法，递归
+void Print1ToMaxOfDigits_solution2(int n)
+{
+	if (n <= 0) return;
+
+	char* number = new char[n + 1];
+	number[n] = '\0';
+
+	for (int i = 0; i < 10; ++i)
+	{
+		number[0] = i + '0';
+		Print1ToMaxOfDigitsRecursively(number, n, 0);
+	}
+	delete[] number;
+}
+
+
+void Print1ToMaxOfDigitsRecursively(char* number, int length, int index)
+{
+	if (index == length - 1)
+	{
+		PrintNumber(number);
+		return;
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		number[index + 1] = i + '0';
+		Print1ToMaxOfDigitsRecursively(number, length, index + 1);
+	}
+}
+int main()
+{
+	int n;
+	cin >> n;
+	cout << "Digits are : ";
+	//Print1ToMaxOfDigits(n);
+	Print1ToMaxOfDigits_solution2(n);
+	system("PAUSE");
+	return 0;
+}
