@@ -1,0 +1,60 @@
+#include <iostream>
+#include "NODE.h" 
+
+using namespace std;
+
+ListNode* ReverseList(ListNode* pHead)
+{
+	if (pHead == nullptr)
+		throw "invalid input";
+	ListNode* pReverseList = nullptr;
+	ListNode* pNode = pHead;
+	ListNode* pFront = nullptr;
+	ListNode* pBehind = nullptr;
+
+	while (pNode != nullptr)
+	{
+		if (pNode->pNext == nullptr)
+			pReverseList = pNode;
+		pBehind = pNode->pNext;
+
+		pNode->pNext = pFront;
+
+		pFront = pNode;
+		pNode = pBehind;
+
+	}
+	return pReverseList;
+}
+
+
+int main()
+{
+	/*ListNode* pNode1 = CreateListNode(1);
+	ListNode* pNode2 = CreateListNode(2);
+	ListNode* pNode3 = CreateListNode(3);
+	ListNode* pNode4 = CreateListNode(4);
+	ListNode* pNode5 = CreateListNode(5);
+	ListNode* pNode6 = CreateListNode(6);
+
+
+	ConnectListNodes(pNode1, pNode2);
+	ConnectListNodes(pNode2, pNode3);
+	ConnectListNodes(pNode3, pNode4);
+	ConnectListNodes(pNode4, pNode5);
+	ConnectListNodes(pNode5, pNode6);*/
+	ListNode* pNode1 = nullptr;
+	try
+	{
+		
+		ListNode* pNode = ReverseList(pNode1);
+		cout << pNode->value << endl;
+	}
+	catch (const char* msg)
+	{
+		cerr << msg << endl;
+	}
+	
+	system("PAUSE");
+	return 0;
+}
