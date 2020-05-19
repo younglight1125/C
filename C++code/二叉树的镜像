@@ -1,0 +1,39 @@
+#include <iostream>
+#include "NODE.h" 
+#include "BinaryTree.h"
+using namespace std;
+
+void MirrorRecursively(BinaryTree* pNode)
+{
+	if (pNode == nullptr)
+		return;
+	if (pNode->pLeft == nullptr && pNode->pRight == nullptr)
+		return;
+
+	swap(pNode->pLeft->value, pNode->pRight->value);
+	if (pNode->pLeft)
+		MirrorRecursively(pNode->pLeft);
+	if (pNode->pRight)
+		MirrorRecursively(pNode->pRight);
+}
+
+
+int main()
+{
+	BinaryTree* pNode8 = CreateBinaryTreeNode(8);
+	BinaryTree* pNode6 = CreateBinaryTreeNode(6);
+	BinaryTree* pNode10 = CreateBinaryTreeNode(10);
+	BinaryTree* pNode5 = CreateBinaryTreeNode(5);
+	BinaryTree* pNode7 = CreateBinaryTreeNode(7);
+	BinaryTree* pNode9 = CreateBinaryTreeNode(9);
+	BinaryTree* pNode11 = CreateBinaryTreeNode(11);
+
+	ConnectTreeNodes(pNode8, pNode6, pNode10);
+	ConnectTreeNodes(pNode6, pNode5, pNode7);
+	ConnectTreeNodes(pNode10, pNode9, pNode11);
+	cout << pNode6->value << endl;
+	MirrorRecursively(pNode8);
+	cout << pNode6->value << endl;
+	system("PAUSE");
+	return 0;
+}
