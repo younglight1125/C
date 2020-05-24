@@ -1,0 +1,86 @@
+#include <iostream>
+#include <stack>
+#include "NODE.h" 
+#include "BinaryTree.h"
+using namespace std;
+
+//之字形打印二叉树
+void Print(BinaryTree* pRoot)
+{
+	if (pRoot == nullptr)
+		return;
+
+	stack<BinaryTree*> level[2];
+	int current = 0;
+	int next = 1;
+
+	level[current].push(pRoot);
+	while (!level[0].empty() || !level[1].empty())
+	{
+		BinaryTree* pNode = level[current].top();
+		level[current].pop();
+		//printf("%d",pNode->value);  //为啥都是0   //原因：c++向下兼容，c不能想上兼容
+		cout << pNode->value << " ";
+		if (current == 0)
+		{
+			if (pNode->pLeft)
+				level[next].push(pNode->pLeft);
+			if (pNode->pRight)
+				level[next].push(pNode->pRight);
+		}
+		else
+		{
+			if (pNode->pRight)
+				level[next].push(pNode->pRight);
+			if (pNode->pLeft)
+				level[next].push(pNode->pLeft);
+
+		}
+
+
+		if (level[current].empty())
+		{
+			printf("\n");
+			current = 1 - current;
+			next = 1 - next;
+		}
+	}
+}
+
+void Test()
+{
+	BinaryTree* Node1 = CreateBinaryTreeNode(1);
+	BinaryTree* Node2 = CreateBinaryTreeNode(2);
+	BinaryTree* Node3 = CreateBinaryTreeNode(3);
+	BinaryTree* Node4 = CreateBinaryTreeNode(4);
+	BinaryTree* Node5 = CreateBinaryTreeNode(5);
+	BinaryTree* Node6 = CreateBinaryTreeNode(6);
+	BinaryTree* Node7 = CreateBinaryTreeNode(7);
+	BinaryTree* Node8 = CreateBinaryTreeNode(8);
+	BinaryTree* Node9 = CreateBinaryTreeNode(9);
+	BinaryTree* Node10 = CreateBinaryTreeNode(10);
+	BinaryTree* Node11 = CreateBinaryTreeNode(11);
+	BinaryTree* Node12 = CreateBinaryTreeNode(12);
+	BinaryTree* Node13 = CreateBinaryTreeNode(13);
+	BinaryTree* Node14 = CreateBinaryTreeNode(14);
+	BinaryTree* Node15 = CreateBinaryTreeNode(15);
+
+
+	ConnectTreeNodes(Node1, Node2, Node3);
+	ConnectTreeNodes(Node2, Node4, Node5);
+	ConnectTreeNodes(Node3, Node6, Node7);
+	ConnectTreeNodes(Node4, Node8, Node9);
+	ConnectTreeNodes(Node5, Node10, Node11);
+	ConnectTreeNodes(Node6, Node12, Node13);
+	ConnectTreeNodes(Node7, Node14, Node15);
+
+	//cout << Node2->value;
+	Print(Node1);
+}
+
+int main(int argc, char* argv[])
+{
+	Test();
+	system("PAUSE");
+	return 0;
+}
