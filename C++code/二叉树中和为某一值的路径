@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include "NODE.h" 
+#include "BinaryTree.h"
+using namespace std;
+void FindPath(BinaryTree* pRoot, int expectedSum, vector<int> & path, int CurrentSum);
+void FindPath(BinaryTree* pRoot, int expectedSum)
+{	
+	if (pRoot == nullptr)
+		return;
+
+	vector<int> path;
+	int currentSum = 0;
+	FindPath(pRoot, expectedSum, path, currentSum);
+}
+
+void FindPath(BinaryTree* pRoot, int expectedSum, vector<int> & path, int CurrentSum)
+{
+	CurrentSum += pRoot->value;
+	path.push_back(pRoot->value);
+
+	bool isLeaf = pRoot->pLeft == nullptr && pRoot->pRight == nullptr;
+	if (CurrentSum == expectedSum && isLeaf)
+	{
+		cout << "path is found : ";
+		vector<int>::iterator iter = path.begin();
+		for (; iter != path.end(); iter++)
+		{
+			cout << *iter << endl;
+		}
+	}
+
+	if (pRoot->pLeft != nullptr)
+		FindPath(pRoot->pLeft, expectedSum, path, CurrentSum);
+	if (pRoot->pRight != nullptr)
+		FindPath(pRoot->pRight, expectedSum, path, CurrentSum);
+
+
+	path.pop_back();
+}
+
+
+void Test()
+{
+	BinaryTree* Node1 = CreateBinaryTreeNode(10);
+	BinaryTree* Node2 = CreateBinaryTreeNode(5);
+	BinaryTree* Node3 = CreateBinaryTreeNode(12);
+	BinaryTree* Node4 = CreateBinaryTreeNode(4);
+	BinaryTree* Node5 = CreateBinaryTreeNode(7);
+	/*BinaryTree* Node6 = CreateBinaryTreeNode(6);
+	BinaryTree* Node7 = CreateBinaryTreeNode(7);
+	BinaryTree* Node8 = CreateBinaryTreeNode(8);
+	BinaryTree* Node9 = CreateBinaryTreeNode(9);
+	BinaryTree* Node10 = CreateBinaryTreeNode(10);
+	BinaryTree* Node11 = CreateBinaryTreeNode(11);
+	BinaryTree* Node12 = CreateBinaryTreeNode(12);
+	BinaryTree* Node13 = CreateBinaryTreeNode(13);
+	BinaryTree* Node14 = CreateBinaryTreeNode(14);
+	BinaryTree* Node15 = CreateBinaryTreeNode(15);*/
+
+
+	ConnectTreeNodes(Node1, Node2, Node3);
+	ConnectTreeNodes(Node2, Node4, Node5);
+	/*ConnectTreeNodes(Node3, Node6, Node7);
+	ConnectTreeNodes(Node4, Node8, Node9);
+	ConnectTreeNodes(Node5, Node10, Node11);
+	ConnectTreeNodes(Node6, Node12, Node13);
+	ConnectTreeNodes(Node7, Node14, Node15);*/
+
+	//cout << Node2->value;
+	int num = 22;
+	FindPath(Node1, num);
+	
+}
+
+int main(int argc, char* argv[])
+{
+	Test();
+	system("PAUSE");
+	return 0;
+}
