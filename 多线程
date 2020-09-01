@@ -1,0 +1,62 @@
+/*
+生产者消费者问题
+*/
+#include <iostream>
+#include <deque>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <windows.h>
+using namespace std;
+deque<int> q;
+mutex mu;//实例化m对象，不要理解为定义变量
+condition_variable cond;
+int c = 0;//缓冲区的产品的个数
+
+void producer() {
+	int data1;
+	while (1) {
+		if (c < 3) {//限流
+			{   //作用域{}
+				data1 = rand();
+				unique_lock<mutex> locker(mu);//锁
+				q.push_front(data1);
+				cout << "store : " << data1 << endl;
+				cond.notify_one();//通知取
+				++c;
+			}
+			Sleep(500);
+		}
+		
+	}
+}
+
+
+void consumer() {
+	int data2;
+	while (1) {
+		{
+			unique_lock<mutex> locker(mu);
+			while (q.empty()) {
+				cond.wait(locker);//wait()阻塞前会先进行解锁，解锁后生产者才能获得锁来访方法产品到缓冲区；生产者notify后，将不再阻塞，且自动又获得了锁。
+				data2 = q.back();
+				q.pop_back();
+				cout << "get : " << data2 << endl;
+				--c;
+			}
+			Sleep(1500);
+		}
+	}
+}
+
+
+
+int main() {
+	thread t1(producer);
+	thread t2(consumer);
+	t1.join();
+	t2.join();
+	system("pause");
+	return 0;
+
+}
