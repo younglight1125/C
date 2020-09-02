@@ -1,0 +1,68 @@
+/*
+循环打印ABC
+*/
+
+#include <iostream> 
+#include <mutex>
+#include <condition_variable>
+#include <thread>
+using namespace std;
+
+mutex mu;
+condition_variable cv;
+int ready = 0;
+
+void fun1() {
+	unique_lock<mutex> ul(mu);
+	int cnt = 0;
+	while (cnt < 10) {
+		while (ready != 0)
+			cv.wait(ul);
+		cout << "A" << " ";
+		ready = 1;
+		cnt++;
+		cv.notify_all();
+	}
+}
+
+
+void fun2() {
+	unique_lock<mutex> ul(mu);
+	int cnt = 0;
+	while (cnt<10)
+	{
+		while (ready != 1)
+			cv.wait(ul);
+		cout << "B" << " ";
+		ready = 2;
+		cnt++;
+		cv.notify_all();
+	}
+}
+
+void fun3() {
+	unique_lock<mutex> ul(mu);
+	int cnt = 0;
+	while (cnt<10)
+	{
+		while (ready != 2)
+			cv.wait(ul);
+		cout << "C" << " ";
+		ready = 0;
+		cnt++;
+		cv.notify_all();
+	}
+}
+
+int main() {
+	thread t1(fun1);
+	thread t2(fun2);
+	thread t3(fun3);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	system("pause");
+	return 0;
+
+}
