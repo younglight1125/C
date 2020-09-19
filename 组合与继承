@@ -1,0 +1,63 @@
+/*
+*组合与继承的关系
+*/
+
+
+
+
+//继承    是一种is a 的关系
+//1.父类对于子类师可见的，不安全
+//2.父类改变，子类会改变，高度耦合
+class Human
+{
+　　…
+};
+class Man : public Human
+{
+　　…
+};
+class Woman : public Man
+{
+　　…
+};
+
+
+
+
+
+//组合    是一种has   a的关系
+
+class Eye
+{
+public:
+　　void Look(void);
+};
+class Nose
+{
+public:
+　　void Smell(void);
+};
+class Mouth
+{
+public:
+　　void Eat(void);
+};
+class Ear
+{
+public:
+　　void Listen(void);
+};
+// 正确的设计，冗长的程序
+class Head
+{
+public:
+　　void Look(void) { m_eye.Look(); }
+　　void Smell(void) { m_nose.Smell(); }
+　　void Eat(void) { m_mouth.Eat(); }
+　　void Listen(void) { m_ear.Listen(); }
+private:
+　　Eye m_eye;
+　　Nose m_nose;
+　　Mouth m_mouth;
+Ear m_ear;
+};
